@@ -2,15 +2,6 @@ package external;
 
 public class GeoHash {
 	
-	private static final GeoHash myGeoHash = new GeoHash();
-	
-	private GeoHash() {
-	}
-	
-	public static GeoHash getGeoHash() {
-		return myGeoHash;
-	}
-	
 	// A copy from http://developer-should-know.com/post/87283491372/geohash-encoding-and-decoding-algorithm
 
     private static final String BASE_32 = "0123456789bcdefghjkmnpqrstuvwxyz";
