@@ -43,7 +43,6 @@ public class MySQLTableCreation {
 					+ ")";
 			stmt.executeUpdate(sql);
 			
-			
 			sql = "CREATE TABLE users ("
 					+ "user_id VARCHAR(255) NOT NULL,"
 					+ "password VARCHAR(255) NOT NULL,"
@@ -52,6 +51,25 @@ public class MySQLTableCreation {
 					+ "PRIMARY KEY (user_id)"
 					+ ")";
 			stmt.executeUpdate(sql);
+			
+			sql = "CREATE TABLE categories ("
+					+ "item_id VARCHAR(255) NOT NULL,"
+					+ "category VARCHAR(255) NOT NULL,"
+					+ "PRIMARY KEY (item_id, category),"
+					+ "FOREIGN KEY (item_id) REFERENCES items(item_id)"
+					+ ")";
+			stmt.executeUpdate(sql);
+			
+			sql = "CREATE TABLE history ("
+					+ "user_id VARCHAR(255) NOT NULL,"
+					+ "item_id VARCHAR(255) NOT NULL,"
+					+ "last_favor_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
+					+ "PRIMARY KEY (user_id, item_id),"
+					+ "FOREIGN KEY (user_id) REFERENCES users(user_id),"
+					+ "FOREIGN KEY (item_id) REFERENCES items(item_id)"
+					+ ")";
+			stmt.executeUpdate(sql);
+
 
 
 
