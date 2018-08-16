@@ -49,29 +49,30 @@ public class Item {
 	public String getItemId() {
 		return itemId;
 	}
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
-	}
+
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public double getRating() {
 		return rating;
 	}
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
+
 	public String getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+
 	public Set<String> getCategories() {
 		return categories;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public double getDistance() {
+		return distance;
 	}
 
 	
