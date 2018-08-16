@@ -17,16 +17,16 @@ import db.DBConnection;
 import db.DBConnectionFactory;
 
 /**
- * Servlet implementation class RecommendItem
+ * Servlet implementation class ItemHistory
  */
-@WebServlet("/recommendation")
-public class RecommendItem extends HttpServlet {
+@WebServlet("/history")
+public class ItemHistory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RecommendItem() {
+    public ItemHistory() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,6 +35,14 @@ public class RecommendItem extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		DBConnection connection = DBConnectionFactory.getConnection();
 	   	 try {
@@ -53,14 +61,12 @@ public class RecommendItem extends HttpServlet {
 	   	 } finally {
 	   		 connection.close();
 	   	 }
-
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBConnection connection = DBConnectionFactory.getConnection();
 	   	 try {
 	   		 JSONObject input = RpcHelper.readJSONObject(request);
@@ -78,7 +84,6 @@ public class RecommendItem extends HttpServlet {
 	   	 } finally {
 	   		 connection.close();
 	   	 }
-
 	}
 
 }
