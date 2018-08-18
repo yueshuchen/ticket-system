@@ -93,16 +93,26 @@ public class MySQLConnection implements DBConnection {
 		if (conn == null) {
 			return new HashSet<>();
 		}
-		Set<String> favoriteItemIds = new HashSet<>();
+		
+		Set<String> favoriteItems = new HashSet<>();
+		
 		try {
-			String sql = "SELECT * FROM items WHERE item_id = ?";
+			String sql = "SELECT item_id FROM history WHERE user_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, userId);
 			
-		} catch (Exception e) {
+			ResultSet rs = stmt.executeQuery();
 			
+			while (rs.next()) {
+				String itemId = rs.getString("item_id");
+				favoriteItems.add(itemId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
-		return null;
+		return favoriteItems;
+
 	}
 
 	@Override
