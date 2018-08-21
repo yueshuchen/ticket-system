@@ -13,14 +13,86 @@
      */
     function init() {
         // Register event listeners
-        $('nearby-btn').addEventListener('click', loadNearbyItems);
-        $('fav-btn').addEventListener('click', loadFavoriteItems);
-        $('recommend-btn').addEventListener('click', loadRecommendedItems);
+    	$('login-btn').addEventListener('click', login);
+		$('nearby-btn').addEventListener('click', loadNearbyItems);
+		$('fav-btn').addEventListener('click', loadFavoriteItems);
+		$('recommend-btn').addEventListener('click', loadRecommendedItems);
+		$('register-link').addEventListener('click', registerLink);
+		$('register-btn').addEventListener('click', register);
+
+		validateSession();
+
+
 
         var welcomeMsg = $('welcome-msg');
         welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
         initGeoLocation();
     }
+    
+    function validateSession() {
+		// The request parameters
+		var url = './login';
+		var req = JSON.stringify({});
+
+		// display loading message
+		showLoadingMessage('Validating session...');
+
+		// make AJAX call
+		ajax('GET', url, req,
+		// session is still valid
+		function(res) {
+			var result = JSON.parse(res);
+
+			if (result.status === 'OK') {
+				onSessionValid(result);
+			}
+		});
+	}
+    
+    function onSessionValid(result) {
+		user_id = result.user_id;
+		user_fullname = result.name;
+
+		var loginForm = $('login-form');
+		var registerForm = $('register-form');
+		var itemNav = $('item-nav');
+		var itemList = $('item-list');
+		var avatar = $('avatar');
+		var welcomeMsg = $('welcome-msg');
+		var logoutBtn = $('logout-link');
+
+		welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
+
+		showElement(itemNav);
+		showElement(itemList);
+		showElement(avatar);
+		showElement(welcomeMsg);
+		showElement(logoutBtn, 'inline-block');
+		hideElement(loginForm);
+		hideElement(registerForm);
+
+		initGeoLocation();
+	}
+
+	function onSessionInvalid() {
+		var loginForm = $('login-form');
+		var itemNav = $('item-nav');
+		var itemList = $('item-list');
+		var avatar = $('avatar');
+		var welcomeMsg = $('welcome-msg');
+		var logoutBtn = $('logout-link');
+		var registerForm = $('register-form');
+
+		hideElement(itemNav);
+		hideElement(itemList);
+		hideElement(avatar);
+		hideElement(logoutBtn);
+		hideElement(welcomeMsg);
+		hideElement(registerForm);
+		showElement(loginForm);
+	}
+
+
 
     function initGeoLocation() {
         if (navigator.geolocation) {
@@ -62,6 +134,110 @@
             loadNearbyItems();
         });
     }
+    
+ // -----------------------------------
+	// Login
+	// -----------------------------------
+
+
+	function login() {
+		var username = $('username').value;
+		var password = $('password').value;
+		password = md5(username + md5(password));
+
+		// The request parameters
+		var url = './login';
+		var req = JSON.stringify({
+			user_id : username,
+			password : password,
+		});
+
+		ajax('POST', url, req,
+		// successful callback
+		function(res) {
+			var result = JSON.parse(res);
+
+			// successfully logged in
+			if (result.status === 'OK') {
+				onSessionValid(result);
+			}
+		},
+
+		// error
+		function() {
+			showLoginError();
+		});
+	}
+	
+	
+
+	function showLoginError() {
+		$('login-error').innerHTML = 'Invalid username or password';
+	}
+
+	function clearLoginError() {
+		$('login-error').innerHTML = '';
+	}
+	
+	
+    function register() {
+    	var username = $('username').value;
+		var password = $('password').value;
+		password = md5(username + md5(password));
+		var firstname = $('first_name').value;
+		var secondname = $('second_name').value;
+		
+		
+		var url = './register';
+		var req = JSON.stringify({
+			user_id : username,
+			password : password,
+			first_name : firstname,
+			second_name : secondname
+		});
+
+		ajax('POST', url, req,
+		// successful callback
+		function(res) {
+			var result = JSON.parse(res);
+
+			// successfully
+			if (result.status === 'OK') {
+				onSessionInvalid();
+			}
+		},
+
+		// error
+		function() {
+			showRegisterError();
+		});
+
+    }
+    
+
+	function showRegisterError() {
+		$('register-error').innerHTML = 'User ID already existed!';
+	}
+
+	
+	function registerLink() {
+		var loginForm = $('login-form');
+		var itemNav = $('item-nav');
+		var itemList = $('item-list');
+		var avatar = $('avatar');
+		var welcomeMsg = $('welcome-msg');
+		var logoutBtn = $('logout-link');
+		var registerForm = $('register-form');
+
+		hideElement(itemNav);
+		hideElement(itemList);
+		hideElement(avatar);
+		hideElement(logoutBtn);
+		hideElement(welcomeMsg);
+		showElement(registerForm);
+		hideElement(loginForm);
+	}
+
 
     // -----------------------------------
     // Helper Functions
@@ -156,7 +332,11 @@
         xhr.onload = function() {
         	if (xhr.status === 200) {
         		callback(xhr.responseText);
-        	} else {
+        	}  else if (xhr.status === 201) {
+        		callback(xhr.responseText);
+        	}  else if (xhr.status === 403) {
+				onSessionInvalid();
+			} else {
         		errorHandler();
         	}
         };

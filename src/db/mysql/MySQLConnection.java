@@ -252,7 +252,9 @@ public class MySQLConnection implements DBConnection {
 
 	@Override
 	public boolean verifyLogin(String userId, String password) {
+		
 		if (conn == null) {
+			
 			return false;
 		}
 		
@@ -261,9 +263,11 @@ public class MySQLConnection implements DBConnection {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, userId);
 			stmt.setString(2, password);
+			
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()) {
+				
 				return true;
 			}
 			
@@ -273,6 +277,30 @@ public class MySQLConnection implements DBConnection {
 		
 		return false;
 
+	}
+	
+	public boolean createUser(String userId, String password, String first_name, String second_name) {
+		if (conn == null) {
+			return false;
+		}
+		
+		
+		try {
+			String sql = "INSERT IGNORE items VALUES(?, ?, ?, ?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.setString(2, password);
+			ps.setString(3, first_name);
+			ps.setString(4, second_name);
+			if (!ps.execute()) return false;
+			
+	   	 } catch (Exception e) {
+	   		e.printStackTrace();
+	   		return false;
+	   	 }
+		
+		
+		return true;
 	}
 
 }

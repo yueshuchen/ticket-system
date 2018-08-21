@@ -89,6 +89,9 @@ public interface DBConnection {
 		 * @return boolean
 		 */
 		public boolean verifyLogin(String userId, String password);
+		
+		
+		public boolean createUser(String userId, String password, String first_name, String second_name);
 	
 
 
