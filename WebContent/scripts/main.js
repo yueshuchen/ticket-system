@@ -181,8 +181,8 @@
 	
 	
     function register() {
-    	var username = $('username').value;
-		var password = $('password').value;
+    	var username = $('register-username').value;
+		var password = $('register-password').value;
 		password = md5(username + md5(password));
 		var firstname = $('first_name').value;
 		var secondname = $('second_name').value;

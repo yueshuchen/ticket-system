@@ -50,12 +50,13 @@ public class Register extends HttpServlet {
 			String password = input.getString("password");
 			String first_name = input.getString("first_name");
 			String second_name = input.getString("second_name");
+		
 			
-			System.out.println(userId + ";" + password + ";" + first_name + ";" + second_name);
 			
 			JSONObject obj = new JSONObject();
 			
 			if (conn.createUser(userId, password, first_name, second_name)) {
+				
 				obj.put("status", "OK");
 				response.setStatus(201);
 			} else {

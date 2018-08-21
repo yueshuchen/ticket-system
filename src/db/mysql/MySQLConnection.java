@@ -283,19 +283,18 @@ public class MySQLConnection implements DBConnection {
 		if (conn == null) {
 			return false;
 		}
-		
-		
+
 		try {
-			String sql = "INSERT IGNORE items VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO users VALUES(?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			ps.setString(2, password);
 			ps.setString(3, first_name);
 			ps.setString(4, second_name);
-			if (!ps.execute()) return false;
-			
+			ps.execute();
+
 	   	 } catch (Exception e) {
-	   		e.printStackTrace();
+	   		
 	   		return false;
 	   	 }
 		
